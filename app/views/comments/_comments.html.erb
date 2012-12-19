@@ -1,0 +1,13 @@
+<div id="comments">
+<% @comments.each do |comment| %>
+  <div  class="form-actions">
+  	
+  
+  	 <strong><%= simple_format comment.author_name %></strong>
+    <blockquote>
+    	<p><%= simple_format comment.content %></p>
+    </blockquote>
+<hr />
+  </div>
+<% end %>
+</div>

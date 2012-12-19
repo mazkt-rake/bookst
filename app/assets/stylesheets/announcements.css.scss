@@ -1,0 +1,15 @@
+// Place all the styles related to the announcements controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.announcement {
+  width: 100%;
+  background-color: rgba(42, 99, 105, 0.9);
+  
+  padding: 10px 0;
+  text-align: center;
+  a {
+    font-size: 12px;
+    margin-left: 5px;
+    color: #DF6E1E;
+  }
+}

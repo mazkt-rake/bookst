@@ -1,0 +1,24 @@
+
+<%= simple_form_for @book, :html => { :class => 'form-horizontal',:multipart => true } do |f| %>
+
+  
+  <%= f.input :photo %>
+ 
+  <%= f.input :name %>
+  <%= f.input :info %>
+  <%= f.input :isbn %>
+  <%= f.input :authorname %>
+  <%= f.input :price %>
+  <%= f.input :publisher %>
+  <p>&nbsp;&nbsp;&nbsp; <%= f.label :publisherdate %> &nbsp;<%= f.text_field :publisherdate %></p>
+ 
+  <%= f.input :quantity %>
+  <%= f.association :categories, :as => :check_boxes %>
+  <%= f.association :stocks, :as => :radio_buttons %>
+
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                books_path, :class => 'btn' %>
+  </div>
+<% end %>

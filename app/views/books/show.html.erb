@@ -1,0 +1,70 @@
+<%- model_class = Book -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:photo) %>:</strong></dt>
+  <dd><%= image_tag @book.photo.url(:small) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
+  <dd><%= @book.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:info) %>:</strong></dt>
+  <dd><%= @book.info %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:isbn) %>:</strong></dt>
+  <dd><%= @book.isbn %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:authorname) %>:</strong></dt>
+  <dd><%= @book.authorname %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:price) %>:</strong></dt>
+  <dd><%= number_to_currency @book.price, :unit => "RM"%></dd>
+  <dt><strong><%= model_class.human_attribute_name(:publisher) %>:</strong></dt>
+  <dd><%= @book.publisher %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:publisherdate) %>:</strong></dt>
+  <dd><%= @book.publisherdate %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:quantity) %>:</strong></dt>
+  <dd><%= @book.quantity %></dd>
+ <dt><strong><%= model_class.human_attribute_name(:category) %>:</strong></dt>
+ <dd><% @book.categories.each do |cat| %>
+      <%= link_to cat.name, root_path(:cat => cat.id) %>
+      <% end  %></dd>
+   <dt><strong><%= model_class.human_attribute_name(:stock) %>:</strong></dt>
+ <dd><% @book.stocks.each do |sto| %>
+      <%= link_to sto.name, root_path(:cat => sto.id) %>
+      <% end  %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              books_path, :class => 'btn btn-mini btn-inverse'  %><br /><br />
+<% if current_user && current_user.has_role?(:admin)  %>
+  <%= form_tag(line_items_path, :method => "post") do %>
+        <%= hidden_field_tag(:book_id, @book.id) %>
+        <%= submit_tag("Add to Cart",  :class => 'btn btn-mini btn-warning') %>
+      <% end %>
+      <% end %>
+ <% if current_user && (current_user.has_role?(:admin) || current_user.id == @book.user_id) %>
+  <%= link_to t('.edit' , :default => t("helpers.links.edit")),
+        edit_book_path(@book), :class => 'btn btn-mini btn-info' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+        book_path(@book),
+        :method => :delete,
+        :comfirm => t('.comfirm', :default => t("helpers.links.comfirm", :default => 'Are you sure?'  )),
+        :class => 'btn btn-mini btn-danger' %>
+   
+  <% end  %>
+  
+</div>
+<hr />
+
+<% unless @book.comments.empty? %>
+<h2>Comments</h2>
+ <h4><%= pluralize(@book.comments.size, 'comment') %></h4>
+
+<div class="comments">
+<%= render "comments/comments" %>
+<% end %>
+<br /> 
+</div>
+<hr /><h3>&nbsp;&nbsp;&nbsp;Add your comment:</h3>
+<div class="comments">
+<%= render "comments/form" %>
+</div>

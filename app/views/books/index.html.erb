@@ -1,0 +1,92 @@
+
+    <div class="content2">
+              <div id="myCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                  <div class="item">
+                    <img src="assets/bootstrap-mdo-sfmoma-01.jpg" alt="">
+                    <div class="carousel-caption">
+                      <h4>First Thumbnail label</h4>
+                      <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                    </div>
+                  </div>
+                  <div class="item active">
+                    <img src="assets/bootstrap-mdo-sfmoma-02.jpg" alt="">
+                    <div class="carousel-caption">
+                      <h4>Second Thumbnail label</h4>
+                      <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <img src="assets/bootstrap-mdo-sfmoma-03.jpg" alt="">
+                    <div class="carousel-caption">
+                      <h4>Third Thumbnail label</h4>
+                      <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                    </div>
+                  </div>
+                </div>
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+              </div>
+            </div>
+  
+
+
+<% @books.each do |book| %>
+	<div class="row">
+		<div class= "span8"><h2><%= book.name %></h2></div>
+		<div class= "span4"><h2><%= number_to_currency book.price, :unit => "RM"%></h2></div>
+	</div>
+	
+	<div class="row">
+		
+		<div class="span6">Author Name: <%= book.authorname %></div>
+		<div class="span2"><%= image_tag book.photo.url(:small) %></div>
+		
+		<div class="span4">Categories: 
+			<% book.categories.each do |cat| %>
+			<%= link_to cat.name, root_path(:cat => cat.id) %>
+			<% end  %>
+			<br/>Stock :
+			<% book.stocks.each do |sto| %>
+			<%= link_to sto.name, root_path(:cat => sto.id) %>
+			<% end  %><br />
+			Post by: <%= book.user.name %>
+		</div>
+
+	</div>
+	<br />
+	
+	<blockquote> <%= book.info %> </blockquote>
+	
+	  <span class="comments3"><%= pluralize(book.comments.size, 'comment') %></span>
+	
+	 
+	<% if current_user && (current_user.has_role?(:admin) || current_user.id == book.user_id) %>
+	<%= link_to t('.edit' , :default => t("helpers.links.edit")),
+				edit_book_path(book), :class => 'btn btn-info btn-mini' %>
+	<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+				book_path(book),
+				:method => :delete,
+				:comfirm => t('.comfirm', :default => t("helpers.links.comfirm", :default => 'Are you sure?'	)),
+				:class => 'btn btn-mini btn-danger' %>
+
+	<% end  %>
+	<%= link_to t('.show' , :default => t("helpers.links.show")),
+				book, :class => 'btn  btn btn-inverse btn-mini' %>	
+				 <br /><br />
+<% if current_user %>
+  <%= form_tag(line_items_path, :method => "post") do %>
+        <%= hidden_field_tag(:book_id, book.id) %>
+        <%= submit_tag("Add to Cart",  :class => 'btn btn-mini btn-warning') %>
+      <% end %>	
+       <% end %>			
+	<hr />
+<% end  %>
+<% if current_user && current_user.has_role?(:admin)  %>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_book_path,
+            :class => 'btn btn-primary' %>
+
+	<% end  %>
+

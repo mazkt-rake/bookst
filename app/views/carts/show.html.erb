@@ -1,0 +1,38 @@
+
+
+<h1>Shopping Cart</h1>
+
+<table id="cart" class="table table-striped">
+  <tr>
+    <th>Product</th>
+    <th>Qty</th>
+    <th class="price">Unit Price</th>
+    <th class="price">Full Price</th>
+  </tr>
+  <% for line_item in @cart.line_items %>
+    <tr class="<%= cycle :odd, :even %>">
+      <td><%=h line_item.book.name %></td>
+      <td class="qty"><%= line_item.quantity %></td>
+      <td class="price"><%= number_to_currency(line_item.unit_price, :unit => "RM") %></td>
+      <td class="price"><%= number_to_currency(line_item.full_price, :unit => "RM") %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td class="total price" colspan="4">
+      Total: <%= number_to_currency @cart.total_price , :unit => "RM"%>
+    </td>
+  </tr>
+</table>
+<% @params = {'sid' => 1817037, 'mode' => '2CO', 'merchant_order_id' => @cart.id} %>
+<% i=0 %>
+<% for line_item in @cart.line_items %>
+    <% @params['li_'+i.to_s+'_book_id'] = line_item.book.id.to_s %>
+    <% @params['li_'+i.to_s+'_name'] = line_item.book.name %>
+    <% @params['li_'+i.to_s+'_price'] = line_item.book.price %>
+    <% @params['li_'+i.to_s+'_quantity'] = line_item.quantity.to_s %>
+    <% i+=1 %>
+<% end %>
+<div class = "btn-primary2">
+<% @form = Twocheckout::Checkout.form(@params)   %>
+<%= @form.html_safe %>
+</div>
