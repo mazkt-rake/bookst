@@ -32,12 +32,14 @@ test: &test
   socket: /var/run/mysqld/mysqld.sock
 
 production:
-  adapter: postgresql
-  encoding: unicode
-  database: bookst_production
-  pool: 5
-  username: bookst
-  password:
+  adapter:  postgresql
+encoding: unicode
+pool: 5
+database: d7f16ckshsdbhl
+username: bhvokxpnnlptuj
+password: MWwpk8p_d2wiXqLWHnj_N3isAl
+host: ec2-54-243-241-130.compute-1.amazonaws.com
+port: 5432
 
 
 cucumber:
